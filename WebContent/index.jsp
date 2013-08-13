@@ -132,7 +132,7 @@
                 <a href="#" id="loginButton"><span>Login</span><em></em></a>
                 <div style="clear:both"></div>
                 <div id="loginBox">                
-                    <form method="post" id="loginForm" action="login_proc.jsp">
+                    <form method="post" id="loginForm" action="Login.do">
                         <fieldset id="body">
                             <fieldset>
                                 <label for="email">Email Address</label>

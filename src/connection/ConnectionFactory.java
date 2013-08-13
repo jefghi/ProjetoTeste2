@@ -6,77 +6,92 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import modelo.Usuarios;
+import model.Usuarios;
 
 public class ConnectionFactory {
     
 	private Connection con;
 	
-	public Connection getConnection() {
-		String dbUrl = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
-		String dbUser = "booksite";
-		String dbPassword = "booksite";		
-		try {
-			try {
-				Class.forName("oracle.jdbc.OracleDriver");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}			
+	static final String dbUrl = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
+	static final String dbUser = "booksite";
+	static final String dbPassword = "booksite";
+    static final String oracleDriver = "oracle.jdbc.OracleDriver";
+        
+	
+    public ConnectionFactory()  {
+    	this.con = startConnection();
+    }     
+    
+    public ConnectionFactory(Usuarios Usuario) {
+    	this.con = startConnection(Usuario);
+    }
+    
+    public Connection getConnection() {
+    	return con;
+    }
+    
+    private void loadOracleDriver() {
+    	try {
+			Class.forName(oracleDriver);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);				
+		}
+    }              
+    
+	private Connection startConnection() {
+		loadOracleDriver();			
 			
-			return DriverManager.getConnection( dbUrl , dbUser, dbPassword );					
+		try {
+			return DriverManager.getConnection( dbUrl , dbUser, dbPassword );
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} 	   
+		}					
+		
     }
 	
-	public Connection getConnection(Usuarios usuario) {
-		String dbUrl = "jdbc:oracle:thin:@127.0.0.1:1521:XE";
-		String dbUser = "booksite";
-		String dbPassword = "booksite";		
+	private Connection startConnection(Usuarios usuario) {									
+		con = startConnection();
+		if ( checkValidUser(usuario).equals("True") )  {					
+				return con;					
+		} 	   
+		return null;
+    }
+	
+	private String checkValidUser(Usuarios usuario){
+		ResultSet res = validateUserAndPassword(usuario);			
 		try {
-			try {
-				Class.forName("oracle.jdbc.OracleDriver");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}			
-			
-			con = DriverManager.getConnection( dbUrl , dbUser, dbPassword );
-			System.out.println("CHEGOU AQUI");
-			try {				
-				ResultSet res = validateUserAndPassword(usuario);			
-				if( res.next() ) {
-					System.out.println("Retorna Con");
-					return con;
-				}
-					
-				
-													
-				//System.out.println("Retornou NULL");
-				return null;
-				
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}			
+			if( res.next() ) {			
+				return "True";
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		} 	   
-    }
-	
-	public ResultSet validateUserAndPassword(Usuarios usuario) {
+		}
+		return "False";
+	}
+		
+	private ResultSet validateUserAndPassword(Usuarios usuario) {
 		String sql = "select 1 from USUARIOS " +  
-					 " where ( upper(login) = upper('" + usuario.getLogin() + "') or " +
-					 "       ( upper(email) = upper('" + usuario.getEmail() + "') ) ) " +
-					 " and senha = '" + usuario.getSenha() +"'";		
-		System.out.println(sql);
-	    try {
+					 " where ( upper(login) = upper(?) or " +
+					 "       ( upper(email) = upper(?) ) ) " +
+					 " and senha = ?";		
+		
+	    return ExecuteQueryUsuarios(usuario, sql);	    
+    }
+
+	private ResultSet ExecuteQueryUsuarios(Usuarios usuario, String sql) {
+		try {
 	    	PreparedStatement stmt = con.prepareStatement(sql);	    		    	
+			
+	    	stmt.setString( 1, usuario.getLogin() );
+			stmt.setString( 2, usuario.getEmail() );
+			stmt.setString( 3, usuario.getSenha() );
 			
 			ResultSet res = stmt.executeQuery(sql);
 			
 			return res;		
 	    } catch (SQLException e) {
 	    	throw new RuntimeException(e);
-	    }	    
-    }
+	    }
+	}
 
 }

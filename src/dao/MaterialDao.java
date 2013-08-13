@@ -7,16 +7,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.crypto.provider.RSACipher;
-
-import modelo.Materiais;
+import model.Materiais;
 import connection.ConnectionFactory;
 
 public class MaterialDao {
 	private Connection con;
 	
 	public MaterialDao() throws SQLException {
-		this.con = new ConnectionFactory().getConnection();		
+		this.con = (Connection) new ConnectionFactory();		
 	}	
 	
 	public List<Materiais> getList() {								

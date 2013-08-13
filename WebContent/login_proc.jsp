@@ -3,10 +3,10 @@
 <%@page import="dao.UsuarioDao"%>
 <%@page import="connection.ConnectionFactory"%>
 <%@page import="java.sql.*"%>
-<%@page import="modelo.Usuarios"%>
+<%@page import="model.Usuarios"%>
 
 <%
-String redirectURL;
+	String redirectURL;
 
 try {
 	//System.out.println("1");
@@ -19,7 +19,7 @@ try {
 	user.setSenha(request.getParameter("password"));
 	
 	
-	Connection con = new ConnectionFactory().getConnection(user);
+	Connection con = new ConnectionFactory().startConnection(user);
 	
 	if ( con == null ) {
 		out.print("Usuário ou login inválido!");
@@ -40,15 +40,15 @@ try {
 		//con.commit();
 		con.close();
 		if (user.getNome().equals("")){
-			 out.println("Usuário Não existe");		 
-			 redirectURL = "index.jsp?loginError=1"; 					
+	 out.println("Usuário Não existe");		 
+	 redirectURL = "index.jsp?loginError=1"; 					
 		} else { 		   
-			redirectURL = "MyAccount.jsp";		
+	redirectURL = "MyAccount.jsp";		
 		}							
 		
 		response.sendRedirect(redirectURL);		
 	}	
-			
+	
 } catch(NullPointerException nexp) {
 	out.print("1 - Erro inexperado!");	
 } catch (SQLException ex) {
@@ -56,7 +56,6 @@ try {
 	ex.printStackTrace();
 	
 }
-
 %>
 
 

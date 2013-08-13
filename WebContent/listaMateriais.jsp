@@ -8,7 +8,7 @@
 <title>Ghisius Web System - Alpha Version</title>
 <link rel="stylesheet" href="css/style.css" /> 
 </head>
-<%@ page import="modelo.Materiais" %>
+<%@ page import="model.Materiais" %>
 <%@ page import="dao.MaterialDao" %>
 <%@page import="java.sql.*"%>
 <%@page import="java.util.ArrayList"%>

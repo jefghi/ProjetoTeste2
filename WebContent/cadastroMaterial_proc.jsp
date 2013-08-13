@@ -3,9 +3,8 @@
 <%@page import="java.util.*" %>
 <%@page import="connection.ConnectionFactory" %>
 
-<% 
-
-String titulo = request.getParameter("titulo");
+<%
+	String titulo = request.getParameter("titulo");
 String subtitulo = request.getParameter("subtitulo");
 String descricaoMaterial = request.getParameter("descricao");
 int codIdioma = Integer.parseInt(request.getParameter("idioma"));
@@ -13,16 +12,16 @@ int tipoMaterial = Integer.parseInt(request.getParameter("tipoMaterial"));
 
 try {    			
 	String redirectURL = "";
-	Connection con = new ConnectionFactory().getConnection();
+	Connection con = new ConnectionFactory().startConnection();
 	
 	
 	String sql ="insert into materiais (COD_MATERIAL, " +
-					   "COD_IDIOMA, 					" +
-					   "COD_TIPO_MATERIAL, " +
-					   "TITULO, " + 
-					   "SUBTÍTULO, " + 
-					   "DESCRICAO) VALUES " + 
-					   "(SEQ_MATERIAL.NEXTVAL,?,?,?,?,?)";
+			   "COD_IDIOMA, 					" +
+			   "COD_TIPO_MATERIAL, " +
+			   "TITULO, " + 
+			   "SUBTÍTULO, " + 
+			   "DESCRICAO) VALUES " + 
+			   "(SEQ_MATERIAL.NEXTVAL,?,?,?,?,?)";
 	                                   
 	System.out.println(sql);
 	PreparedStatement stmt = con.prepareStatement(sql);
@@ -35,7 +34,7 @@ try {
 	
 	try {				
 		stmt.executeUpdate(sql);				   		    
-				 		  
+		 		  
 		redirectURL = "MyAccount.jsp?ok=1"; 																		
 		response.sendRedirect(redirectURL);
 	
@@ -50,6 +49,4 @@ try {
 } catch(NullPointerException nexp) {
 	out.print("Erro!");
 }
-
-
 %>

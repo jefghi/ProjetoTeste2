@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import modelo.Usuarios;
+import model.Usuarios;
 import connection.ConnectionFactory;
 
 public class UsuarioDao {
@@ -13,7 +13,6 @@ public class UsuarioDao {
 	
 	public UsuarioDao(Usuarios usuario) throws SQLException {
 		this.con = new ConnectionFactory().getConnection();
-		//System.out.println("Funcionou!!!!!");
 	}
 	
 	public void insere(Usuarios usuario) throws SQLException {
@@ -51,24 +50,24 @@ public class UsuarioDao {
 		}
 	}
 	
-//	public List<Usuarios> getLista() {
-//		try {
-//			List<Usuarios> usuarios = new ArrayList<Usuarios>();
-//			Connection con = new ConnectionFactory().getConnection();
-//			
-//			String sql = "select * from MATERIAIS";
-//			PreparedStatement stmt = con.prepareStatement(sql);
-//			ResultSet res = stmt.executeQuery();
-//			
-//			while (res.next()){
-//				Usuarios usuario = new Usuarios();
-//				usuario.setCodUsuario(res.getString(""));
-//				
-//			}
-//			
-//		} catch (SQLException e) { 
-//			throw new RuntimeException(e);
-//		}		  
-//	}
+	/*public List<Usuarios> getLista() {
+		try {
+			List<Usuarios> usuarios = new ArrayList<Usuarios>();
+			Connection con = new ConnectionFactory().getConnection();
+			
+			String sql = "select * from MATERIAIS";
+			PreparedStatement stmt = con.prepareStatement(sql);
+			ResultSet res = stmt.executeQuery();
+			
+			while (res.next()){
+				Usuarios usuario = new Usuarios();
+				usuario.setCodUsuario(res.getString(""));
+				
+			}
+			
+		} catch (SQLException e) { 
+			throw new RuntimeException(e);
+		}		  
+	}*/
 	
 }
